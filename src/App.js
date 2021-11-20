@@ -1,23 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import {useEffect, useState} from 'react';
+import Country from './Components/Country/Country';
+import Cart from './Components/Cart/Cart';
 
 function App() {
+  const [country, setCountry] = useState([]);
+  const [population,setPopulation] = useState('');
+
+  useEffect(() => {
+    fetch("https://restcountries.com/v3.1/all")
+    .then(res => res.json())
+    .then(data => setCountry(data))
+
+  },[])
+
+const handleAddToCountry =(pd)=>{
+ 
+  const newPopulatin =[...population,pd];
+  setPopulation(newPopulatin);
+
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Country Loaded Data :{country.length}</h1>
+      <h3>Selected Country : {population.length}</h3>
+      <Cart population={population}></Cart>
+      <ul>
+
+
+      {
+        country.map(country=><Country 
+          pd={country}
+          handleAddToCountry={handleAddToCountry}
+          ></Country>)
+      }
+      </ul>
+     
     </div>
   );
 }
